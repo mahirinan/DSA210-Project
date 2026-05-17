@@ -3,51 +3,112 @@
 
 This repository contains the final project for the DSA 210: Introduction to Data Science course at Sabancı University.
 
-## Project Overview
-The objective of this project is to investigate the relationship between the performance of national football teams and the demographics of their domestic leagues. Specifically, the project focuses on the "Domesticity Index"—the ratio of local players in top clubs—and its impact on national team success in major tournaments (FIFA World Cup and UEFA EURO).
+---
 
 ## Motivation
-While a strong domestic league is often assumed to benefit the national team, the globalization of football has led to an influx of foreign players in top European leagues. This project explores whether maintaining a high ratio of local players in domestic clubs actually leads to better national team results or if success is now driven by other global factors.
+
+The central motivation of this project is to investigate a long-standing debate in international football: Does a national team's success depend on the "Domesticity Index" of its local league? Traditionally, it has been argued that a strong national team is built upon the foundation of domestic clubs consistently fielding local players to maintain tactical cohesion and national identity.
+
+However, the rapid globalization of football since the late 1990s, catalyzed by the Bosman Ruling and the financial concentration in elite European leagues (the "Top 5"), has challenged this conventional wisdom. This project tests whether "staying local" still provides a competitive edge in the modern era or if it has become a nostalgic myth, by determining:
+
+- **The Impact of Globalization:** Whether a squad's success is more closely tied to the "Top 5 League Ratio" rather than domestic representation.
+- **Financial vs. Demographic Indicators:** If quantitative metrics such as Market Value and FIFA Rankings have surpassed the "Domesticity Index" as the primary predictors of tournament performance.
+
+---
 
 ## Data Sources & Collection
+
 A hybrid methodology was used to construct the dataset (160 primary observations from 1986 to 2024):
-- **National Team Data:** Sourced from Kaggle (International Football Results).
-- **Squad Demographics:** Automated extraction from Transfermarkt and digital archives using Python (Requests & BeautifulSoup).
-- **Market Values & FIFA Ranks:** Retrieved from historical official records.
-- **Club Performance:** International club trophy data (UCL, UEL) was manually curated and merged using Pandas.
+
+- **National Team Data:** Historical tournament results from Kaggle (International Football Results).
+- **Squad Demographics & Market Values:** Custom automated pipeline using Python's Requests and BeautifulSoup to scrape Transfermarkt archives — extracting full squad lists, club affiliations, league of each player, and historical market values.
+- **Club Performance:** International club trophy data (UCL, UEL) manually curated and merged using Pandas.
+
+**Data Processing:** Raw data was merged and standardized using Pandas. Key steps included feature engineering (Domesticity Index, Top 5 League Ratio), handling missing historical values via trend-based estimation, and normalizing Success Scores by tournament stage (Winner = 100, Runner-up = 80, etc.).
+
+---
 
 ## Key Features
-The analysis revolves around the following variables:
-- **Success Score:** Quantitative metric for tournament progress.
-- **Domesticity Index:** Percentage of local players in top domestic clubs.
-- **Top 5 League Ratio:** Concentration of players in elite European leagues.
-- **Market Value (€M):** Total squad market value.
-- **Club Trophy Count:** Number of international trophies won by domestic clubs in that year.
+
+| Variable | Description |
+|---|---|
+| Success Score | Quantitative metric for tournament progress |
+| Domesticity Index | Percentage of squad players competing in their home country's league |
+| Top 5 League Ratio | Proportion of squad playing in elite European leagues |
+| Market Value (€M) | Total squad market value |
+| FIFA Rank | Pre-tournament FIFA ranking |
+| Club Trophy Count | International trophies (UCL/UEL) won by domestic clubs that year |
+| Average Age | Mean age of the squad |
+| Squad Size | Total number of players in the squad |
+
+---
 
 ## Methodology
-- **Exploratory Data Analysis (EDA):** Correlation analysis and visualization of metrics against success.
-- **Hypothesis Testing:** Pearson Correlation and T-Tests to verify the initial "Domesticity" hypothesis.
-- **Machine Learning (Regression):** Multiple models trained to predict Success Score:
-  - Linear Regression, Ridge, Lasso
-  - Support Vector Regression (SVR)
-  - K-Nearest Neighbors Regressor (best k selected via 5-fold CV)
-  - Random Forest Regressor
-  - Gradient Boosting Regressor
-- **Machine Learning (Classification):** Success Score binned into 3 classes (Low / Mid / High):
-  - Logistic Regression
-  - K-Nearest Neighbors Classifier
-  - Random Forest Classifier
-  - Gradient Boosting Classifier
-  - Support Vector Classifier (SVC)
-- **Model Evaluation:** R², MAE, RMSE for regression; Accuracy & Classification Report for classification; 5-Fold Cross-Validation for all key models.
+
+### Exploratory Data Analysis (EDA)
+Correlation analysis and visualization of all metrics against Success Score using scatter plots, heatmaps, and time-series line plots to reveal the globalization trend (1986–2024).
+
+### Hypothesis Testing
+- **Pearson Correlation** to measure the linear relationship between Domesticity Index and Success Score.
+- **T-Tests** to compare mean success scores of high-domesticity vs. low-domesticity squads.
+
+### Machine Learning
+
+**Regression** (predicting numerical Success Score):
+
+| Model | Role |
+|---|---|
+| Linear Regression | Baseline |
+| Ridge | Regularized linear |
+| Lasso | Sparse linear |
+| SVR | Non-linear kernel method |
+| KNN Regressor | Distance-based (best k via 5-fold CV) |
+| Random Forest | Ensemble tree method |
+| Gradient Boosting | Boosted ensemble |
+
+**Classification** (binning Success Score into Low / Mid / High):
+Logistic Regression, KNN Classifier, Random Forest, Gradient Boosting, SVC.
+
+**Overfitting Mitigation:** Given the small dataset size (160 rows), 5-Fold Cross-Validation was applied to all key models. Train MAE, Test MAE, CV Train MAE, and CV Test MAE are reported side by side to explicitly evaluate generalization.
+
+---
 
 ## Key Findings
-- The initial hypothesis regarding the Domesticity Index was not supported; no significant linear correlation (r≈-0.04) was found.
-- FIFA Rank and Market Value remain the strongest predictors of success.
-- A clear Globalization Trend was observed: Successful modern squads are increasingly composed of players competing in the "Top 5" European leagues.
-- Among ML models, Random Forest achieved the best regression performance; cross-validation confirmed results are stable.
+
+- **Domesticity Hypothesis Rejected:** Pearson r ≈ -0.048, T-test p-value > 0.05. Having a high concentration of local players is no longer a prerequisite for international success.
+- **Strongest Predictors:** FIFA Rank (r = -0.27) and Market Value (r = 0.21) are the most reliable indicators of tournament progression.
+- **Globalization Trend:** Top 5 League Ratio shows a positive correlation (r = 0.19). Since the 1990s, the ratio of elite-league players in successful squads has increased by ~12.63%.
+- **ML Results:**
+
+| Model | Train MAE | Test MAE | CV Train MAE | CV Test MAE |
+|---|---|---|---|---|
+| Linear Regression (Baseline) | 16.64 | 18.00 | 16.72 | 17.72 |
+| KNN Regressor | 16.16 | 19.25 | 15.38 | 19.18 |
+| Random Forest | 12.24 | 18.21 | 11.82 | 18.10 |
+
+Random Forest achieved the highest predictive power. The close convergence between CV train and test scores confirms the model is not overfitting despite the small dataset.
+
+---
+
+## Limitations
+
+- **League Quality:** The Domesticity Index does not account for the quality/UEFA coefficient of the domestic league — all domestic leagues are treated equally.
+- **Historical Financial Data:** Market values from the late 1980s–early 1990s were estimated from historical records, introducing a minor margin of error.
+- **External Factors:** Coaching philosophy, injuries, and squad psychology were not quantifiable and are excluded from the models.
+
+---
+
+## Future Work
+
+- **Weighted Domesticity Index** incorporating league strength (UEFA/FIFA coefficients).
+- **Player Fatigue Analysis** using minutes played prior to the tournament.
+- **Managerial Influence** metric based on coach experience and win rates.
+- **Broader Geographical Scope** including AFC and CAF tournaments.
+
+---
 
 ## How to Run
+
 Clone the repository:
 ```bash
 git clone https://github.com/mahirinan/DSA210-Project.git
@@ -61,12 +122,6 @@ Open the Jupyter Notebook:
 jupyter notebook world_cup_data.ipynb
 ```
 
+---
+
 ## Repository Structure
-```
-DSA210-Project/
-├── world_cup_data.ipynb                  # Main analysis notebook
-├── world_cup_data_with_trophies.csv      # Primary dataset
-├── results.csv                           # Results data
-├── DSA210 progress proposal.pdf          # Progress report
-└── README.md
-```
