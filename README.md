@@ -103,7 +103,7 @@ To evaluate predictive capacity on a small dataset constraint, a robust evaluati
 
 3. **Open the Jupyter Notebook:**
 ```bash
-   jupyter notebook "world_cup_data (1).ipynb"
+   jupyter notebook "world_cup_data.ipynb"
 ```
 
 ---
@@ -111,7 +111,7 @@ To evaluate predictive capacity on a small dataset constraint, a robust evaluati
 ## Repository Structure
 
 DSA210-Project/
-├── world_cup_data (1).ipynb              # Main analysis notebook (Most recent)
+├── world_cup_data.ipynb                  # Main analysis notebook (Most recent)
 ├── ml_results.png                        # Side-by-side Train vs Test MAE comparison graph
 ├── world_cup_data_with_trophies.csv      # Primary dataset (with Club_Trophy_Count)
 ├── world_cup_data.csv                    # Base dataset
