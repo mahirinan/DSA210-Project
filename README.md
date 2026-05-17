@@ -125,3 +125,19 @@ jupyter notebook world_cup_data.ipynb
 ---
 
 ## Repository Structure
+
+
+DSA210-Project/
+├── world_cup_data.ipynb                  # Main analysis notebook
+├── world_cup_data_with_trophies.csv      # Primary dataset (with Club_Trophy_Count)
+├── world_cup_data.csv                    # Base dataset
+├── results.csv                           # Results data
+├── DSA210_Final_Report.DOCX              # Final report
+├── DSA210 progress proposal.pdf          # Progress report
+└── README.md
+
+---
+
+## AI Disclosure
+
+AI-assisted tools (LLMs) were used in a limited capacity for code debugging, documentation refinement, and statistical logic verification. All core data collection, hypothesis formulation, feature engineering, and model selection were designed and executed by the student.
